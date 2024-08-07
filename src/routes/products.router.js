@@ -2,9 +2,9 @@ import { Router } from "express";
 import ProductManager from "../managers/product-manager.js";
 
 const manager = new ProductManager("./src/data/products.json");
-const router = Router();
+const productsRouter = Router();
 
-router.get("/", async (req, res) => {
+productsRouter.get("/", async (req, res) => {
     const limit = req.query.limit
     try {
         const arrayProducts = await manager.getProducts();
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/:pid", async (req, res) => {
+productsRouter.get("/:pid", async (req, res) => {
     const id = parseInt(req.params.pid);
     try {
         const product = await manager.getProductById(id);
@@ -34,7 +34,7 @@ router.get("/:pid", async (req, res) => {
 });
 
 
-router.post("/", async (req, res) => {
+productsRouter.post("/", async (req, res) => {
     const newProduct = req.body;
     try {
         const addedProduct = await manager.addProduct(newProduct);
@@ -50,7 +50,7 @@ router.post("/", async (req, res) => {
 });
 
 
-router.put("/:pid", async (req, res) => {
+productsRouter.put("/:pid", async (req, res) => {
     const { pid } = req.params;
     const { title, description, price, code, stock, status = true, category } = req.body;
     try {
@@ -63,7 +63,7 @@ router.put("/:pid", async (req, res) => {
 });
 
 
-router.delete("/:pid", async (req, res) => {
+productsRouter.delete("/:pid", async (req, res) => {
     const { pid } = req.params;
 
     try {
@@ -77,4 +77,4 @@ router.delete("/:pid", async (req, res) => {
 
 
 
-export default router;
+export default productsRouter;
