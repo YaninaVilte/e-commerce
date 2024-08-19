@@ -1,7 +1,7 @@
 import { Router } from "express";
-import ProductManager from "../managers/product-manager.js";
+import ProductManager from "../dao/db/product-manager-db.js";
 
-const manager = new ProductManager("./src/data/products.json");
+const manager = new ProductManager();
 const productsRouter = Router();
 
 productsRouter.get("/", async (req, res) => {
@@ -20,7 +20,7 @@ productsRouter.get("/", async (req, res) => {
 
 
 productsRouter.get("/:pid", async (req, res) => {
-    const id = parseInt(req.params.pid);
+    const id = req.params.pid;
     try {
         const product = await manager.getProductById(id);
         if (!product) {
@@ -37,17 +37,13 @@ productsRouter.get("/:pid", async (req, res) => {
 productsRouter.post("/", async (req, res) => {
     const newProduct = req.body;
     try {
-        const addedProduct = await manager.addProduct(newProduct);
-        if (addedProduct) {
-            res.status(201).json({ message: "Producto agregado exitosamente", product: addedProduct });
-        } else {
-            res.status(400).send("No se pudo agregar el producto");
-        }
+        await manager.addProduct(newProduct);
+        res.status(201).send("Producto agregado");
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ status: "error", message: error.message });
+        res.status(500).send("Error del servidor")
     }
-});
+})
+
 
 
 productsRouter.put("/:pid", async (req, res) => {
@@ -74,6 +70,7 @@ productsRouter.delete("/:pid", async (req, res) => {
         res.status(500).send("Error al eliminar producto");
     }
 });
+
 
 
 
