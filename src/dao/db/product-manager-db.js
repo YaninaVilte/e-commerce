@@ -91,13 +91,16 @@ class ProductManager {
                 console.log("No se encuentra el producto");
                 return null;
             }
-            // return productDelete;
             console.log("Producto eliminado exitosamente");
+            return productDelete; // Devuelve el producto eliminado
         } catch (error) {
-            console.log("Error al eliminar productos", error);
+            console.log("Error al eliminar producto", error);
+            return { error: "Error al eliminar producto" }; // Devuelve un mensaje de error
         }
     }
+
 }
+
 
 
 export default ProductManager;

@@ -50,7 +50,7 @@ productsRouter.put("/:pid", async (req, res) => {
     const { pid } = req.params;
     const { title, description, price, code, stock, status = true, category } = req.body;
     try {
-        await manager.updateProduct(Number(pid), { title, description, price, code, stock, status, category });
+        await manager.updateProduct(String(pid), { title, description, price, code, stock, status, category });
         res.json({ message: "Producto actualizado exitosamente" });
     } catch (error) {
         console.log(error);
@@ -63,13 +63,14 @@ productsRouter.delete("/:pid", async (req, res) => {
     const { pid } = req.params;
 
     try {
-        await manager.deleteProduct(Number(pid));
+        await manager.deleteProduct(String(pid));
         res.send("Producto eliminado exitosamente");
     } catch (error) {
         console.log(error);
         res.status(500).send("Error al eliminar producto");
     }
 });
+
 
 
 
