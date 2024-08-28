@@ -5,7 +5,7 @@ class CartManager {
 
     async createCart() {
         try {
-            const newCart = new CartModel({products: []})
+            const newCart = new CartModel({productos: []})
             await newCart.save();
             return newCart;
         } catch (error) {
@@ -31,13 +31,13 @@ class CartManager {
     async addProductsToCart(cartID, productID, quantity = 1) {
         try {
             const cart = await this.getCartByID(cartID);
-            const productExist = cart.products.find(p => p.product.toString() === productID);
+            const productExist = cart.productos.find(p => p.product.toString() === productID);
             if (productExist) {
                 productExist.quantity += quantity;
             } else {
-                cart.products.push({ product: productID, quantity });
+                cart.productos.push({ product: productID, quantity });
             }
-            cart.markModified("products");
+            cart.markModified("productos");
             await cart.save();
             return cart;
         } catch (error) {
@@ -54,11 +54,11 @@ class CartManager {
             if (!cart) {
                 throw new Error("Carrito no encontrado");
             }
-            const productIndex = cart.products.findIndex(p => p.product.toString() === productID);
+            const productIndex = cart.productos.findIndex(p => p.product.toString() === productID);
             if (productIndex === -1) {
                 throw new Error("Producto no encontrado en el carrito");
             }
-            cart.products.splice(productIndex, 1);
+            cart.productos.splice(productIndex, 1);
             return cart;
         } catch (error) {
             console.error("Error al eliminar el producto del carrito:", error);
@@ -75,13 +75,13 @@ class CartManager {
             }
 
             // Buscar el producto dentro del carrito
-            const productIndex = cart.products.findIndex(p => p.product.toString() === productID);
+            const productIndex = cart.productos.findIndex(p => p.product.toString() === productID);
             if (productIndex === -1) {
                 throw new Error("Producto no encontrado en el carrito");
             }
 
             // Actualizar la cantidad del producto
-            cart.products[productIndex].quantity = newQuantity;
+            cart.productos[productIndex].quantity = newQuantity;
 
             // Guardar el carrito actualizado
             await cart.save();
@@ -89,6 +89,25 @@ class CartManager {
             return cart;
         } catch (error) {
             console.error("Error al actualizar la cantidad del producto en el carrito:", error);
+            throw error;
+        }
+    }
+
+    async clearCart(cartID) {
+        try {
+            const cart = await this.getCartByID(cartID);
+            if (!cart) {
+                throw new Error("Carrito no encontrado");
+            }
+
+            // Vaciamos los productos del carrito
+            cart.productos = [];
+
+            // Guardamos el carrito actualizado
+            await cart.save();
+            return cart;
+        } catch (error) {
+            console.error("Error al vaciar el carrito:", error);
             throw error;
         }
     }

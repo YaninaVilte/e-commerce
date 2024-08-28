@@ -20,7 +20,7 @@ cartsRouter.get("/:cid", async (req, res) => {
 
     try {
         const cart = await cartManager.getCartByID(cartID);
-        res.json(cart.products);
+        res.json(cart.productos);
     } catch (error) {
         res.status(500).send("Error al obtener los productos del carrito");
     }
@@ -33,7 +33,7 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
 
     try {
         const updatedCart = await cartManager.addProductsToCart(cartID, productID, quantity);
-        res.json(updatedCart.products);
+        res.json(updatedCart.productos);
     } catch (error) {
         res.status(500).send("Error al agregar un producto al carrito");
     }
@@ -50,13 +50,13 @@ cartsRouter.delete("/:cid/product/:pid", async (req, res) => {
         }
 
         // Busca el índice del producto dentro del carrito
-        const productIndex = cart.products.findIndex(product => product.product.toString() === pid);
+        const productIndex = cart.productos.findIndex(product => product.product.toString() === pid);
         if (productIndex === -1) {
             return res.status(404).send("Producto no encontrado en el carrito");
         }
 
         // Elimina el producto del carrito
-        cart.products.splice(productIndex, 1);
+        cart.productos.splice(productIndex, 1);
 
         // Guarda el carrito actualizado
         await cart.save();
@@ -81,6 +81,8 @@ cartsRouter.put("/:cid", async (req, res) => {
     }
 });
 
+
+
 // PUT api / carts /: cid / products /:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
 cartsRouter.post("/:cid/product/:pid", async (req, res) => {
     const { cid, pid } = req.params;
@@ -94,10 +96,22 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
     try {
         // Llama al método para actualizar la cantidad del producto en el carrito
         const updatedCart = await cartManager.updateProductQuantity(cid, pid, quantity);
-        res.json(updatedCart.products);  // Devolver los productos actualizados del carrito
+        res.json(updatedCart.productos);  // Devolver los productos actualizados del carrito
     } catch (error) {
         console.log(error);
         res.status(500).send("Error al actualizar la cantidad del producto");
+    }
+});
+
+cartsRouter.delete("/:cid", async (req, res) => {
+    const { cid } = req.params;
+
+    try {
+        const clearedCart = await cartManager.clearCart(cid);
+        res.json({ message: "Carrito vaciado exitosamente", cart: clearedCart });
+    } catch (error) {
+        console.error("Error al vaciar el carrito:", error);
+        res.status(500).send("Error al vaciar el carrito");
     }
 });
 

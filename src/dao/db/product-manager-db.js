@@ -55,7 +55,6 @@ class ProductManager {
         }
     }
 
-
     async getProductById(id) {
         try {
             const productFind = await ProductsModel.findById(id);
@@ -98,6 +97,8 @@ class ProductManager {
             return { error: "Error al eliminar producto" }; // Devuelve un mensaje de error
         }
     }
+
+
 
 }
 
