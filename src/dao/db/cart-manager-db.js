@@ -5,7 +5,7 @@ class CartManager {
 
     async createCart() {
         try {
-            const newCart = new CartModel({ productos: [] })
+            const newCart = new CartModel({productos: []})
             await newCart.save();
             return newCart;
         } catch (error) {
@@ -94,25 +94,6 @@ class CartManager {
     }
 
     async clearCart(cartID) {
-        try {
-            const cart = await this.getCartByID(cartID);
-            if (!cart) {
-                throw new Error("Carrito no encontrado");
-            }
-
-            // Vaciamos los productos del carrito
-            cart.productos = [];
-
-            // Guardamos el carrito actualizado
-            await cart.save();
-            return cart;
-        } catch (error) {
-            console.error("Error al vaciar el carrito:", error);
-            throw error;
-        }
-    }
-
-    async updateCart(cartID) {
         try {
             const cart = await this.getCartByID(cartID);
             if (!cart) {
