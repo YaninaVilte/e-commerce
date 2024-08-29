@@ -50,9 +50,9 @@ cartsRouter.delete("/:cid/product/:pid", async (req, res) => {
         }
 
         // Busca el índice del producto dentro del carrito
-        const productIndex = cart.productos.findIndex(product => product.product.toString() === pid);
+        const productIndex = cart.productos.findIndex(product => product.product._id.toString() === pid);
         if (productIndex === -1) {
-            return res.status(404).send("Producto no encontrado en el carrito");
+            return res.status(404).send("aaaaProducto no encontrado en el carrito");
         }
 
         // Elimina el producto del carrito
@@ -84,7 +84,7 @@ cartsRouter.put("/:cid", async (req, res) => {
 
 
 // PUT api / carts /: cid / products /:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
-cartsRouter.post("/:cid/product/:pid", async (req, res) => {
+cartsRouter.put("/:cid/product/:pid", async (req, res) => {
     const { cid, pid } = req.params;
     const { quantity } = req.body;
 

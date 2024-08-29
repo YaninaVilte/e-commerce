@@ -48,23 +48,38 @@ class CartManager {
 
     // ir viedo desde aca
 
+
+
     async removeProductFromCart(cartID, productID) {
         try {
             const cart = await this.getCartByID(cartID);
             if (!cart) {
                 throw new Error("Carrito no encontrado");
             }
-            const productIndex = cart.productos.findIndex(p => p.product.toString() === productID);
+
+            // Loguear los IDs de los productos en el carrito
+            console.log("Product IDs in cart:", cart.productos.map(p => p.product._id.toString()));
+
+            // Busca el índice del producto dentro del carrito
+            const productIndex = cart.productos.findIndex(p => p.product._id.toString() === productID);
             if (productIndex === -1) {
-                throw new Error("Producto no encontrado en el carrito");
+                throw new Error("Producto no essncontrado en el carrito");
             }
+
+            // Elimina el producto del carrito
             cart.productos.splice(productIndex, 1);
+
+            // Guarda el carrito actualizado
+            await cart.save();
+
             return cart;
         } catch (error) {
             console.error("Error al eliminar el producto del carrito:", error);
             throw error;
         }
     }
+
+
 
     async updateProductQuantity(cartID, productID, newQuantity) {
         try {
