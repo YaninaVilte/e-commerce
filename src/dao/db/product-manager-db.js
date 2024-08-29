@@ -22,13 +22,13 @@ class ProductManager {
                 return;
             }
 
-            const productExist = await ProductsModel.findOne({code: code});
+            const productExist = await ProductsModel.findOne({ code: code });
             if (productExist) {
                 console.log("El código debe ser unico");
                 return;
             }
 
-            const newProduct = new ProductsModel ({
+            const newProduct = new ProductsModel({
                 title,
                 description,
                 code,
@@ -61,7 +61,7 @@ class ProductManager {
             if (!productFind) {
                 console.error("Producto no encontrado");
                 return null;
-            } 
+            }
             return productFind;
         } catch (error) {
             console.error("Error al buscar el producto:", error);
@@ -73,7 +73,7 @@ class ProductManager {
     async updateProduct(id, updatedProduct) {
         try {
             const productUpdate = await ProductsModel.findByIdAndUpdate(id, updatedProduct);
-            if(!productUpdate) {
+            if (!productUpdate) {
                 console.log("No se encuentra el producto");
                 return null;
             }

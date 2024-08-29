@@ -68,10 +68,12 @@ cartsRouter.delete("/:cid/product/:pid", async (req, res) => {
     }
 });
 
-// PUT api / carts /:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba. No entiendo que debe hacer aca
+// VERVERVER PUT api / carts /:cid deberá actualizar el carrito con un arreglo de productos con el formato especificado arriba. No entiendo que debe hacer aca
+
 cartsRouter.put("/:cid", async (req, res) => {
-    const { pid } = req.params;
+    const { cid } = req.params;
     const { title, description, price, code, stock, status = true, category } = req.body;
+
     try {
         await manager.updateProduct(String(pid), { title, description, price, code, stock, status, category });
         res.json({ message: "Producto actualizado exitosamente" });
@@ -79,8 +81,8 @@ cartsRouter.put("/:cid", async (req, res) => {
         console.log(error);
         res.status(500).send("Error al intentar editar producto");
     }
-});
 
+});
 
 
 // PUT api / carts /: cid / products /:pid deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body
